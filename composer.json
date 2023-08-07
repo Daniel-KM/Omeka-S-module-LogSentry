@@ -1,0 +1,54 @@
+{
+    "name": "daniel-km/omeka-s-module-log-sentry",
+    "description": "Log Sentry (module for Omeka S)",
+    "type": "library",
+    "license": "CECILL-2.1",
+    "authors": [
+        {
+            "name": "Daniel Berthereau",
+            "email": "Daniel.packagist@Berthereau.net"
+        }
+    ],
+    "homepage": "https://gitlab.com/Daniel-KM/Omeka-S-module-LogSentry",
+    "support": {
+        "issues": "https://gitlab.com/Daniel-KM/Omeka-S-module-LogSentry/-/issues",
+        "forum": "https://forum.omeka.org/"
+    },
+    "keywords": [
+        "Omeka S",
+        "module",
+        "monitor",
+        "log",
+        "logging",
+        "admin",
+        "Sentry"
+    ],
+    "require": {
+        "php": "^8.0",
+        "facile-it/sentry-module": "^3.0",
+        "symfony/http-client": "^5.4",
+        "nyholm/psr7": "^1.8"
+    },
+    "replace": {
+        "laminas/laminas-log": "2.15",
+        "laminas/laminas-servicemanager": "*",
+        "laminas/laminas-stdlib": "*",
+        "psr/container": "*",
+        "psr/log": "*",
+        "symfony/deprecation-contracts": "*",
+        "symfony/options-resolver": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/service-contracts": "2.5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "LogSentry\\": "src/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}
