@@ -38,20 +38,9 @@ class Module extends AbstractModule
 {
     public function init(ModuleManager $moduleManager): void
     {
-        // Autoload is needed only for Sentry, so prepare it only if needed.
-
         // Dependencies of Sentry require at least php 8.0.
         if (PHP_VERSION_ID < 80000) {
-            // error_log('To use module Log with Sentry, php should be version 8.0 or more.');
-            return;
-        }
-
-        // Here, the configs are not yet merged, so check local.config.php for
-        // Sentry. It avoids to add an event.
-        $localConfig = require OMEKA_PATH . '/config/local.config.php';
-        if (empty($localConfig['logger']['writers']['sentry'])
-            || !empty($localConfig['sentry']['disable_module'])
-        ) {
+            error_log('To use module Log with Sentry, php should be version 8.0 or more.');
             return;
         }
 
@@ -68,17 +57,19 @@ class Module extends AbstractModule
         $moduleManager->loadModule('Facile\SentryModule');
     }
 
+    public function getConfig()
+    {
+        return include __DIR__ . '/config/module.config.php';
+    }
+
     public function onBootstrap(MvcEvent $event): void
     {
         parent::onBootstrap($event);
 
-        // Track errors only if needed.
+        // Attah listener only if needed.
         $services = $this->getServiceLocator();
         $config = $services->get('Config');
-        if (empty($config['logger']['writers']['sentry'])
-            || empty($config['logger']['options']['writers']['sentry']['options']['attach_to_logger'])
-            || !empty($config['sentry']['disable_module'])
-        ) {
+        if (empty($config['sentry']['attach_listener'])) {
             return;
         }
 

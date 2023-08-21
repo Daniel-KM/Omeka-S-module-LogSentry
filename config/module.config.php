@@ -4,10 +4,10 @@ namespace LogSentry;
 
 return [
     'logger' => [
+        // Handle all errors, not only exceptions.
         'writers' => [
             'sentry' => true,
         ],
-
         // The logger uses the Laminas Log configuration.
         // @see https://docs.laminas.dev/laminas-log
         // @see https://docs.laminas.dev/laminas-log/service-manager
@@ -31,13 +31,12 @@ return [
                                 ],
                             ],
                         ],
-                        // Handle all errors, not only exceptions. This is a specific option of this module,
-                        'attach_to_logger' => false,
                     ],
                 ],
             ],
         ],
     ],
+
     /**
      * Set specific config for Sentry.
      * Don't update values here, but copy the needed keys at the root of Omeka in config/local.config.php.
@@ -52,7 +51,7 @@ return [
             // Sentry dsn.
             'dsn' => '',
             // other sentry options
-            // https://docs.sentry.io/error-reporting/configuration/?platform=php
+            // https://docs.sentry.io/platforms/php
         ],
         'javascript' => [
             'inject_script' => false,
@@ -63,5 +62,7 @@ return [
                 // https://docs.sentry.io/platforms/javascript
             ],
         ],
+        // Attach listener during bootstrap. This is a specific option of this module,
+        'attach_listener' => false,
     ],
 ];
