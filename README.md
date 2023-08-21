@@ -46,9 +46,8 @@ Config
 ------
 
 To use it, you need a server running php 8.0 or more and to add some keys in the
-file `config/local.config.php` at the root of Omeka:
+file `config/local.config.php` at the root of Omeka. Only the `dsn` is required:
 
-- set key `['sentry']['disable_module']` as `false` (this is the default).
 - fill key `['sentry']['options']['dsn']` with dsn, that is a url provided by
   Sentry in your account and used for authentication and logging.
 - optionally, to monitor the front-end with javascript, set the key `['sentry']['javascript']['inject_script']`
@@ -58,46 +57,28 @@ file `config/local.config.php` at the root of Omeka:
   handling, error rate, hooks, tracing, environment production/development,
   version, filters, etc: see the [documentation about the configuration].
 
-By default, only exceptions are logged. To log more data, you need to modify two
-options:
+By default, only uncaught exceptions and errors are logged.
 
-- enable the logging in key `['logger']['options']['writers']['sentry']['options']['attach_to_logger']`
-- update the priority in key `['logger']['options']['writers']['sentry']['options']['filters'][0]['options']['priority']`
-  if needed. The default is `\Laminas\Log\Logger::ERR` and fine in most of the
-  cases.
+- You may disable standard  error logging: set option `['logger']['writers']['sentry']`
+  as `false`. If you set it `true` (default), the priority can be updated. The
+  default priority is `\Laminas\Log\Logger::ERR` and fine in most of the cases.
+- You may want to attach the default module listener via the key `['sentry']['attach_listener']`
+  as `true`.
 
 Note that it is is useless to monitor events that are not at least error or
 eventually warning. The aim of Sentry is to deploy it to monitor end users
 errors. For development, use other loggers.
 
-So to log exceptions and other errors in Sentry, update the Omeka file `config/local.config.php`
-like this:
+In short, update the Omeka file `config/local.config.php` like this:
 
 ```php
-    // Fill the other keys as needed.
-    'logger' => [
-        'log' => true,
-        'writers' => [
-            'sentry' => true,
-        ],
-        'options' => [
-            'writers' => [
-                'sentry' => [
-                    'options' => [
-                        // Set true if needed.
-                        'attach_to_logger' => false,
-                    ],
-                ],
-            ],
-        ],
-    ],
     'sentry' => [
         'disable_module' => false,
         'options' => [
             // Sentry dsn.
             'dsn' => '',
             // other sentry options
-            // https://docs.sentry.io/error-reporting/configuration/?platform=php
+            // https://docs.sentry.io/platforms/php
         ],
         'javascript' => [
             'inject_script' => false,
@@ -108,8 +89,15 @@ like this:
                 // https://docs.sentry.io/platforms/javascript
             ],
         ],
+        // Attach listener during bootstrap. This is a specific option of this module,
+        'attach_listener' => false,
     ],
 ```
+
+TODO
+----
+
+- [ ] Add a release number that will include all modules versions or commits (or a hash?).
 
 
 Warning
