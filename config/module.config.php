@@ -50,6 +50,11 @@ return [
         'options' => [
             // Sentry dsn.
             'dsn' => '',
+            // See Omeka index.php.
+            'environment' => ($_SERVER['APPLICATION_ENV'] ?? null) === 'development'
+                || ($_SERVER['REDIRECT_APPLICATION_ENV'] ?? null) === 'development'
+                ? 'development'
+                : 'production',
             // other sentry options
             // https://docs.sentry.io/platforms/php
         ],
